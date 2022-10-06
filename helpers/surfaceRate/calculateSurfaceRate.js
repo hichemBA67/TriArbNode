@@ -26,6 +26,10 @@ function calculator(triangularPair) {
   let poolTradeDirection2;
   let poolTradeDirection3;
 
+  let token0Address;
+  let token1Address;
+  let token2Address;
+
   // Calculate looping through forward and reverse rates
   const directionList = ["forward", "reverse"];
 
@@ -47,6 +51,14 @@ function calculator(triangularPair) {
     let bToken1Price = parseFloat(triangularPair.bToken1Price);
     let cToken0Price = parseFloat(triangularPair.cToken0Price);
     let cToken1Price = parseFloat(triangularPair.cToken1Price);
+
+    // Set price info
+    let aToken0Id = triangularPair.aToken0Id;
+    let aToken1Id = triangularPair.aToken1Id;
+    let bToken0Id = triangularPair.bToken0Id;
+    let bToken1Id = triangularPair.bToken1Id;
+    let cToken0Id = triangularPair.cToken0Id;
+    let cToken1Id = triangularPair.cToken1Id;
 
     // Set address info
     let aContract = triangularPair.aContract;
@@ -70,14 +82,14 @@ function calculator(triangularPair) {
       swap1 = aBase;
       swap2 = aQuote;
       swap1Rate = aToken1Price;
-      poolDirectionTrade1 = baseToQuote;
+      poolTradeDirection1 = baseToQuote;
     }
     // Assume start with aQuote if forward
     else if (direction == "reverse") {
       swap1 = aQuote;
       swap2 = aBase;
       swap1Rate = aToken0Price;
-      poolDirectionTrade1 = quoteToBase;
+      poolTradeDirection1 = quoteToBase;
     }
 
     // Place first trade
@@ -89,22 +101,29 @@ function calculator(triangularPair) {
       if (aQuote == bQuote && calculated == 0) {
         swap2Rate = bToken0Price;
         acquiredCoinT2 = acquiredCoinT1 * swap2Rate;
-        poolDirectionTrade2 = quoteToBase;
+        poolTradeDirection2 = quoteToBase;
         poolContract2 = bContract;
+
+        token0Address = aToken0Id;
+        token1Address = bToken1Id;
 
         // Forward: check if bBase (acquired coin) matches cBase
         if (bBase == cBase) {
           swap3 = cBase;
           swap3Rate = cToken1Price;
-          poolDirectionTrade3 = baseToQuote;
+          poolTradeDirection3 = baseToQuote;
           poolContract3 = cContract;
+
+          token2Address = cToken0Id;
         }
         // Forward: check if bBase (acquired coin) matches cQuote
         else if (bBase == cQuote) {
           swap3 = cQuote;
           swap3Rate = cToken0Price;
-          poolDirectionTrade3 = quoteToBase;
+          poolTradeDirection3 = quoteToBase;
           poolContract3 = cContract;
+
+          token2Address = cToken1Id;
         }
 
         acquiredCoinT3 = acquiredCoinT2 * swap3Rate;
@@ -114,22 +133,29 @@ function calculator(triangularPair) {
       else if (aQuote == bBase && calculated == 0) {
         swap2Rate = bToken1Price;
         acquiredCoinT2 = acquiredCoinT1 * swap2Rate;
-        poolDirectionTrade2 = baseToQuote;
+        poolTradeDirection2 = baseToQuote;
         poolContract2 = bContract;
+
+        token0Address = aToken0Id;
+        token1Address = bToken0Id;
 
         // Forward: check if bBase (acquired coin) matches cBase
         if (bQuote == cBase) {
           swap3 = cBase;
           swap3Rate = cToken1Price;
-          poolDirectionTrade3 = baseToQuote;
+          poolTradeDirection3 = baseToQuote;
           poolContract3 = cContract;
+
+          token2Address = cToken0Id;
         }
         // Forward: check if bBase (acquired coin) matches cQuote
         else if (bQuote == cQuote) {
           swap3 = cQuote;
           swap3Rate = cToken0Price;
-          poolDirectionTrade3 = quoteToBase;
+          poolTradeDirection3 = quoteToBase;
           poolContract3 = cContract;
+
+          token2Address = cToken1Id;
         }
         acquiredCoinT3 = acquiredCoinT2 * swap3Rate;
         calculated = 1;
@@ -138,22 +164,29 @@ function calculator(triangularPair) {
       else if (aQuote == cQuote && calculated == 0) {
         swap2Rate = cToken0Price;
         acquiredCoinT2 = acquiredCoinT1 * swap2Rate;
-        poolDirectionTrade2 = quoteToBase;
+        poolTradeDirection2 = quoteToBase;
         poolContract2 = cContract;
+
+        token0Address = aToken0Id;
+        token1Address = cToken1Id;
 
         // Forward: check if bBase (acquired coin) matches cBase
         if (cBase == bBase) {
           swap3 = bBase;
           swap3Rate = bToken1Price;
-          poolDirectionTrade3 = baseToQuote;
+          poolTradeDirection3 = baseToQuote;
           poolContract3 = bContract;
+
+          token2Address = bToken0Id;
         }
         // Forward: check if bBase (acquired coin) matches cQuote
         else if (cBase == bQuote) {
           swap3 = bQuote;
           swap3Rate = bToken0Price;
-          poolDirectionTrade3 = quoteToBase;
+          poolTradeDirection3 = quoteToBase;
           poolContract3 = bContract;
+
+          token2Address = bToken1Id;
         }
 
         acquiredCoinT3 = acquiredCoinT2 * swap3Rate;
@@ -163,22 +196,29 @@ function calculator(triangularPair) {
       else if (aQuote == cBase && calculated == 0) {
         swap2Rate = cToken1Price;
         acquiredCoinT2 = acquiredCoinT1 * swap2Rate;
-        poolDirectionTrade2 = baseToQuote;
+        poolTradeDirection2 = baseToQuote;
         poolContract2 = cContract;
+
+        token0Address = aToken0Id;
+        token1Address = cToken0Id;
 
         // Forward: check if bBase (acquired coin) matches cBase
         if (cQuote == bBase) {
           swap3 = bBase;
           swap3Rate = cToken1Price;
-          poolDirectionTrade3 = quoteToBase;
+          poolTradeDirection3 = quoteToBase;
           poolContract3 = bContract;
+
+          token2Address = bToken0Id;
         }
         // Forward: check if bBase (acquired coin) matches cQuote
         else if (cQuote == bQuote) {
           swap3 = bQuote;
           swap3Rate = bToken0Price;
-          poolDirectionTrade3 = quoteToBase;
+          poolTradeDirection3 = quoteToBase;
           poolContract3 = bContract;
+
+          token2Address = bToken1Id;
         }
         acquiredCoinT3 = acquiredCoinT2 * swap3Rate;
         calculated = 1;
@@ -188,22 +228,29 @@ function calculator(triangularPair) {
       if (aBase == bBase && calculated == 0) {
         swap2Rate = bToken1Price;
         acquiredCoinT2 = acquiredCoinT1 * swap2Rate;
-        poolDirectionTrade2 = baseToQuote;
+        poolTradeDirection2 = baseToQuote;
         poolContract2 = bContract;
+
+        token0Address = aToken1Id;
+        token1Address = bToken0Id;
 
         // Forward: check if bBase (acquired coin) matches cBase
         if (bQuote == cQuote) {
           swap3 = cQuote;
           swap3Rate = cToken0Price;
-          poolDirectionTrade3 = quoteToBase;
+          poolTradeDirection3 = quoteToBase;
           poolContract3 = cContract;
+
+          token2Address = cToken1Id;
         }
         // Forward: check if bBase (acquired coin) matches cQuote
         else if (bQuote == cBase) {
           swap3 = cBase;
           swap3Rate = cToken1Price;
-          poolDirectionTrade3 = baseToQuote;
+          poolTradeDirection3 = baseToQuote;
           poolContract3 = cContract;
+
+          token2Address = cToken0Id;
         }
 
         acquiredCoinT3 = acquiredCoinT2 * swap3Rate;
@@ -213,22 +260,29 @@ function calculator(triangularPair) {
       else if (aBase == bQuote && calculated == 0) {
         swap2Rate = bToken0Price;
         acquiredCoinT2 = acquiredCoinT1 * swap2Rate;
-        poolDirectionTrade2 = quoteToBase;
+        poolTradeDirection2 = quoteToBase;
         poolContract2 = bContract;
+
+        token0Address = aToken1Id;
+        token1Address = bToken1Id;
 
         // Forward: check if bBase (acquired coin) matches cBase
         if (bBase == cQuote) {
           swap3 = cQuote;
           swap3Rate = cToken0Price;
-          poolDirectionTrade3 = quoteToBase;
+          poolTradeDirection3 = quoteToBase;
           poolContract3 = cContract;
+
+          token2Address = cToken1Id;
         }
         // Forward: check if bBase (acquired coin) matches cQuote
         else if (bBase == cBase) {
           swap3 = cBase;
           swap3Rate = cToken1Price;
-          poolDirectionTrade3 = baseToQuote;
+          poolTradeDirection3 = baseToQuote;
           poolContract3 = cContract;
+
+          token2Address = cToken0Id;
         }
         acquiredCoinT3 = acquiredCoinT2 * swap3Rate;
         calculated = 1;
@@ -237,22 +291,29 @@ function calculator(triangularPair) {
       else if (aQuote == cBase && calculated == 0) {
         swap2Rate = cToken1Price;
         acquiredCoinT2 = acquiredCoinT1 * swap2Rate;
-        poolDirectionTrade2 = baseToQuote;
+        poolTradeDirection2 = baseToQuote;
         poolContract2 = cContract;
+
+        token0Address = aToken1Id;
+        token1Address = cToken0Id;
 
         // Forward: check if bBase (acquired coin) matches cBase
         if (cQuote == bQuote) {
           swap3 = bQuote;
           swap3Rate = bToken0Price;
-          poolDirectionTrade3 = quoteToBase;
+          poolTradeDirection3 = quoteToBase;
           poolContract3 = bContract;
+
+          token2Address = bToken1Id;
         }
         // Forward: check if bBase (acquired coin) matches cQuote
         else if (cQuote == bBase) {
           swap3 = bBase;
           swap3Rate = bToken1Price;
-          poolDirectionTrade3 = baseToQuote;
+          poolTradeDirection3 = baseToQuote;
           poolContract3 = bContract;
+
+          token2Address = bToken0Id;
         }
 
         acquiredCoinT3 = acquiredCoinT2 * swap3Rate;
@@ -262,22 +323,29 @@ function calculator(triangularPair) {
       else if (aQuote == cQuote && calculated == 0) {
         swap2Rate = cToken0Price;
         acquiredCoinT2 = acquiredCoinT1 * swap2Rate;
-        poolDirectionTrade2 = quoteToBase;
+        poolTradeDirection2 = quoteToBase;
         poolContract2 = cContract;
+
+        token0Address = aToken1Id;
+        token1Address = cToken1Id;
 
         // Forward: check if bBase (acquired coin) matches cBase
         if (cBase == bQuote) {
           swap3 = bQuote;
           swap3Rate = cToken0Price;
-          poolDirectionTrade3 = quoteToBase;
+          poolTradeDirection3 = quoteToBase;
           poolContract3 = cContract;
+
+          token2Address = bToken1Id;
         }
         // Forward: check if bBase (acquired coin) matches cQuote
         else if (cBase == bBase) {
           swap3 = bBase;
           swap3Rate = bToken1Price;
-          poolDirectionTrade3 = baseToQuote;
+          poolTradeDirection3 = baseToQuote;
           poolContract3 = bContract;
+
+          token2Address = bToken0Id;
         }
         acquiredCoinT3 = acquiredCoinT2 * swap3Rate;
         calculated = 1;
@@ -294,18 +362,21 @@ function calculator(triangularPair) {
     const tradeDescription3 = `Swap ${acquiredCoinT2} of ${swap3} at ${swap3Rate} for ${swap1} acquiring ${acquiredCoinT3}`;
 
     if (profitLossPercentage >= minimumSurfaceRate) {
-      // Construct surfaceRateOutput
-      surfaceRateOutput = {
+      // Construct surfaceRateObject
+      surfaceRateObject = {
         surfaceRateOpportunityHash: triangularPair.surfaceRateOpportunityHash,
+        token0Address,
+        token1Address,
+        token2Address,
         swap1,
         swap2,
         swap3,
         poolContract1,
         poolContract2,
         poolContract3,
-        poolDirectionTrade1,
-        poolDirectionTrade2,
-        poolDirectionTrade3,
+        poolTradeDirection1,
+        poolTradeDirection2,
+        poolTradeDirection3,
         startingAmount,
         acquiredCoinT1,
         acquiredCoinT2,
@@ -321,7 +392,7 @@ function calculator(triangularPair) {
         tradeDescription3,
       };
 
-      saveStructureTradingPairs(surfaceRateOutput);
+      saveStructureTradingPairs(surfaceRateObject);
     }
   }
 }
