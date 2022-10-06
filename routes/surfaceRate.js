@@ -2,8 +2,10 @@ const express = require("express");
 const SurfaceRate = require("../models/SurfaceRate");
 
 //Helpers
-const { runArb, stopArb } = require("../helpers/timedFunction");
-const calculateSurfaceRate = require("../helpers/surfaceRate/calculateSurfaceRate");
+const {
+  startSurfaceRateCalculation,
+  stopSurfaceRateCalculation,
+} = require("../helpers/surfaceRate/surfaceRateCalculation");
 const calculateTimer = require("../helpers/node-cron/calculateTimer");
 
 const router = express.Router();
@@ -11,26 +13,37 @@ const router = express.Router();
 router.post("/calculate-surface-rate/", async (req, res) => {
   const timerData = req.body;
   try {
+    if (
+      !timerData.minutes ||
+      !timerData.hour ||
+      !timerData.dayOfMonth ||
+      !timerData.month ||
+      !timerData.dayOfWeek
+    ) {
+      return res.status(400).json({
+        errors: [{ message: "Please enter valid timer data." }],
+      });
+    }
     const timer = calculateTimer(timerData);
 
-    // calculateSurfaceRate(timer);
+    startSurfaceRateCalculation(timer);
 
-    // res
-    //   .status(200)
-    //   .send(
-    //     "Reaccuring surface rate calculation initialized with interval:  " +
-    //       timer
-    //   );
+    res
+      .status(200)
+      .send(
+        "Reaccuring surface rate calculation initialized with interval:  " +
+          timer
+      );
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Server error");
   }
 });
 
-router.get("/stop-cron/", async (req, res) => {
+router.get("/stop-surface-rate-calc/", async (req, res) => {
   try {
-    stopArb();
-    res.status(200).send("Arbitrage stopped");
+    stopSurfaceRateCalculation();
+    res.status(200).send("Reaccuring surface rate calculation stopped.");
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Server error");

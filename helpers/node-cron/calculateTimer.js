@@ -14,5 +14,5 @@ module.exports = calculateTimer = (timerData) => {
     timer = timerData.seconds + " " + timer;
   }
 
-  console.log(timer);
+  return timer;
 };

@@ -1,20 +1,21 @@
-const createKeccakHash = require("keccak");
 const request = require("request");
-
 const config = require("config");
-graphQLReq = require("../../utils/GraphQLRequest");
-
-const url = config.get("UniswapV3GraphQLEndpoint");
-
-const SurfaceRate = require("../../models/SurfaceRate");
 const cron = require("node-cron");
 
-// Helpers
+// Variables //
+const graphQLReq = require("../../utils/GraphQLRequest");
+const url = config.get("UniswapV3GraphQLEndpoint");
+
+// Helpers //
 const structureTradingPairs = require("./structureTradingPairs");
 
 let task;
 
-module.exports = startSurfaceRateCalculation = (timer) => {
+function startSurfaceRateCalculation(timer) {
+  console.log(
+    "Reaccuring surface rate calculation initialized with interval:  " + timer
+  );
+
   if (task) task.stop();
   task = cron.schedule(timer, async () => {
     console.log("Fetching data from GraphQL ...");
@@ -37,9 +38,11 @@ module.exports = startSurfaceRateCalculation = (timer) => {
     // );
     // await surfaceRate.save();
   });
-};
-
-function stopArb() {
-  task.stop();
-  console.log("Arbitrage stopped.");
 }
+
+function stopSurfaceRateCalculation() {
+  if (task) task.stop();
+  console.log("Reaccuring surface rate calculation stopped.");
+}
+
+module.exports = { startSurfaceRateCalculation, stopSurfaceRateCalculation };
