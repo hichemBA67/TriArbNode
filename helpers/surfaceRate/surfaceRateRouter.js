@@ -9,6 +9,7 @@ const url = config.get("UniswapV3GraphQLEndpoint");
 
 // Helpers //
 const structureTradingPairs = require("./structureTradingPairs");
+const clearSurfaceRateDatabase = require("../database/clearDatabase");
 
 let task;
 
@@ -31,25 +32,22 @@ function startSurfaceRateCalculation(timer) {
     );
     console.log("Fetching data from GraphQL ...");
 
-    // Fetch pool data from GraphQL
-    request.post(
-      url,
-      { json: { query: graphQLReq } },
-      function (error, response, body) {
-        if (!error && response.statusCode == 200) {
-          console.log("Data received from GraphQL.");
-          structureTradingPairs(body);
-        }
-      }
-    );
-
-    // await SurfaceRate.updateOne(
-    //   { surfaceRateHash: surfaceRateHash },
-    //   { $set: data },
-    //   { upsert: true }
-    // );
-    // await surfaceRate.save();
+    sendPostRequest();
   });
+}
+function sendPostRequest() {
+  clearSurfaceRateDatabase();
+  // Fetch pool data from GraphQL
+  request.post(
+    url,
+    { json: { query: graphQLReq } },
+    function (error, response, body) {
+      if (!error && response.statusCode == 200) {
+        console.log("Data received from GraphQL.");
+        structureTradingPairs(body.data.pools);
+      }
+    }
+  );
 }
 
 function stopSurfaceRateCalculation() {
@@ -61,4 +59,8 @@ function stopSurfaceRateCalculation() {
   );
 }
 
-module.exports = { startSurfaceRateCalculation, stopSurfaceRateCalculation };
+module.exports = {
+  startSurfaceRateCalculation,
+  stopSurfaceRateCalculation,
+  sendPostRequest,
+};
