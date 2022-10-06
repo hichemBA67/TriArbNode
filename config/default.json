@@ -1,0 +1,4 @@
+{
+  "mongoURI": "mongodb+srv://triArb:67TriArb1996@triarb.oh7cses.mongodb.net/TriArb?retryWrites=true&w=majority",
+  "UniswapV3GraphQLEndpoint": "https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v3"
+}
