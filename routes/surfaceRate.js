@@ -1,5 +1,5 @@
 const express = require("express");
-const SurfaceRate = require("../models/SurfaceRate");
+const cronstrue = require("cronstrue");
 
 //Helpers
 const {
@@ -31,8 +31,8 @@ router.post("/calculate-surface-rate/", async (req, res) => {
     res
       .status(200)
       .send(
-        "Reaccuring surface rate calculation initialized with interval:  " +
-          timer
+        "Reaccuring surface rate calculation initialized with interval: " +
+          cronstrue.toString(timer)
       );
   } catch (error) {
     console.error(error.message);
@@ -40,7 +40,7 @@ router.post("/calculate-surface-rate/", async (req, res) => {
   }
 });
 
-router.get("/stop-surface-rate-calc/", async (req, res) => {
+router.post("/stop-surface-rate-calc/", async (req, res) => {
   try {
     stopSurfaceRateCalculation();
     res.status(200).send("Reaccuring surface rate calculation stopped.");

@@ -1,6 +1,7 @@
 const request = require("request");
 const config = require("config");
 const cron = require("node-cron");
+const cronstrue = require("cronstrue");
 
 // Variables //
 const graphQLReq = require("../../utils/GraphQLRequest");
@@ -13,13 +14,24 @@ let task;
 
 function startSurfaceRateCalculation(timer) {
   console.log(
-    "Reaccuring surface rate calculation initialized with interval:  " + timer
+    `\n[${new Date(
+      Date.now()
+    ).toUTCString()}] Reaccuring surface rate calculation initialized with interval: ${cronstrue.toString(
+      timer
+    )}`
   );
 
   if (task) task.stop();
   task = cron.schedule(timer, async () => {
+    // Log
+    console.log(
+      `\n[${new Date(
+        Date.now()
+      ).toUTCString()}] Starting surface rate calculation ... `
+    );
     console.log("Fetching data from GraphQL ...");
 
+    // Fetch pool data from GraphQL
     request.post(
       url,
       { json: { query: graphQLReq } },
@@ -42,7 +54,11 @@ function startSurfaceRateCalculation(timer) {
 
 function stopSurfaceRateCalculation() {
   if (task) task.stop();
-  console.log("Reaccuring surface rate calculation stopped.");
+  console.log(
+    `\n[${new Date(
+      Date.now()
+    ).toUTCString()}] Reaccuring surface rate calculation stopped.`
+  );
 }
 
 module.exports = { startSurfaceRateCalculation, stopSurfaceRateCalculation };
