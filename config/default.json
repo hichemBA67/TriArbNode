@@ -8,5 +8,6 @@
   "mainnetRPCRealRate": "https://mainnet.infura.io/v3/a39ad8a5fd24482ba765a9768677b941",
   "mainnetRPCGasFees": "https://mainnet.infura.io/v3/e99f4b6655e94418bdd12efaf7ed56d6",
 
-  "quoterAddress": "0xb27308f9F90D607463bb33eA1BeBb41C27CE5AB6"
+  "quoterAddress": "0xb27308f9F90D607463bb33eA1BeBb41C27CE5AB6",
+  "uniswapV2ContractAddress": "0x01827BB000639decC1425E92BCdDDe66375DA626"
 }
