@@ -51,5 +51,4 @@ function stopRealRateCalculation() {
 module.exports = {
   startRealRateCalculation,
   stopRealRateCalculation,
-  fetchSurfaceRateData,
 };

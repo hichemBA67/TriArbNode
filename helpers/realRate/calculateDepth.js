@@ -6,7 +6,7 @@ const config = require("config");
 const saveRealRateTradingPairs = require("./saveRealRateTradingPairs");
 const { clearRealRateDatabase } = require("../database/clearDatabase");
 
-const mainnetRPC = config.get("mainnetRPC");
+const mainnetRPCRealRate = config.get("mainnetRPCRealRate");
 const realRateAmountIn = config.get("realRateAmountIn");
 const realRateThreashold = config.get("realRateThreashold");
 const quoterAddress = config.get("quoterAddress");
@@ -36,7 +36,6 @@ async function calculatePair(pairData) {
     realRateAmountIn,
     trade1Direction
   );
-
   // Trade 2 //
   if (acquiredCoinT1 == 0) return;
   let acquiredCoinT2 = await getPrice(
@@ -44,7 +43,6 @@ async function calculatePair(pairData) {
     acquiredCoinT1,
     trade2Direction
   );
-
   // Trade 3 //
   if (acquiredCoinT2 == 0) return;
   let acquiredCoinT3 = await getPrice(
@@ -52,7 +50,6 @@ async function calculatePair(pairData) {
     acquiredCoinT2,
     trade3Direction
   );
-
   // Calculate and save results
   caluclateArbitrage(realRateAmountIn, acquiredCoinT3, pairData);
 }
@@ -60,7 +57,7 @@ async function calculatePair(pairData) {
 // GET PRICE //
 async function getPrice(factory, amountIn, tradeDirection) {
   // Get provider
-  const provider = new ethers.providers.JsonRpcProvider(mainnetRPC);
+  const provider = new ethers.providers.JsonRpcProvider(mainnetRPCRealRate);
   const ABI = [
     "function token0() external view returns (address)",
     "function token1() external view returns (address)",

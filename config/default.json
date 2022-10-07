@@ -4,7 +4,9 @@
   "minimumSurfaceRate": 1,
   "startingAmount": 100,
   "realRateAmountIn": 100,
-  "realRateThreashold": 1,
-  "mainnetRPC": "https://mainnet.infura.io/v3/a39ad8a5fd24482ba765a9768677b941",
+  "realRateThreashold": -99,
+  "mainnetRPCRealRate": "https://mainnet.infura.io/v3/a39ad8a5fd24482ba765a9768677b941",
+  "mainnetRPCGasFees": "https://mainnet.infura.io/v3/e99f4b6655e94418bdd12efaf7ed56d6",
+
   "quoterAddress": "0xb27308f9F90D607463bb33eA1BeBb41C27CE5AB6"
 }
