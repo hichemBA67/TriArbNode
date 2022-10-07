@@ -24,6 +24,7 @@ app.use(morgan("tiny"));
 app.use(express.json({ extended: false }));
 
 app.use("/api/surface-rate", require("./routes/surfaceRate"));
+app.use("/api/real-rate", require("./routes/realRate"));
 
 app.listen(5001, () => {
   console.log("Server is running on Port 5001");

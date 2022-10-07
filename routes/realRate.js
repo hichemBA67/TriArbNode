@@ -3,14 +3,14 @@ const cronstrue = require("cronstrue");
 
 //Helpers
 const {
-  startSurfaceRateCalculation,
-  stopSurfaceRateCalculation,
-} = require("../helpers/surfaceRate/surfaceRateRouter");
+  startRealRateCalculation,
+  stopRealRateCalculation,
+} = require("../helpers/realRate/realRateRouter");
 const calculateTimer = require("../helpers/node-cron/calculateTimer");
 
 const router = express.Router();
 
-router.post("/calculate-surface-rate/", async (req, res) => {
+router.post("/calculate-real-rate/", async (req, res) => {
   const timerData = req.body;
   try {
     if (
@@ -26,7 +26,7 @@ router.post("/calculate-surface-rate/", async (req, res) => {
     }
     const timer = calculateTimer(timerData);
 
-    startSurfaceRateCalculation(timer);
+    startRealRateCalculation(timer);
 
     res
       .status(200)
@@ -40,9 +40,9 @@ router.post("/calculate-surface-rate/", async (req, res) => {
   }
 });
 
-router.post("/stop-surface-rate-calculation/", async (req, res) => {
+router.post("/stop-real-rate-calculation/", async (req, res) => {
   try {
-    stopSurfaceRateCalculation();
+    stopRealRateCalculation();
     res.status(200).send("Reaccuring surface rate calculation stopped.");
   } catch (error) {
     console.error(error.message);

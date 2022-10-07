@@ -1,6 +1,6 @@
 const SurfaceRate = require("../../models/SurfaceRate");
 
-module.exports = saveStructureTradingPairs = async (surfaceRateObject) => {
+module.exports = saveSurfaceRateTradingPairs = async (surfaceRateObject) => {
   try {
     let submitSurfaceRate = new SurfaceRate(surfaceRateObject);
     await submitSurfaceRate.save();

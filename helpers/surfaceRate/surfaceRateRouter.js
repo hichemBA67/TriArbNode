@@ -9,7 +9,6 @@ const url = config.get("UniswapV3GraphQLEndpoint");
 
 // Helpers //
 const structureTradingPairs = require("./structureTradingPairs");
-const clearSurfaceRateDatabase = require("../database/clearDatabase");
 
 let task;
 
@@ -30,13 +29,12 @@ function startSurfaceRateCalculation(timer) {
         Date.now()
       ).toUTCString()}] Starting surface rate calculation ... `
     );
-    console.log("Fetching data from GraphQL ...");
 
     sendPostRequest();
   });
 }
 function sendPostRequest() {
-  clearSurfaceRateDatabase();
+  console.log("Fetching data from GraphQL ...");
   // Fetch pool data from GraphQL
   request.post(
     url,
@@ -62,5 +60,4 @@ function stopSurfaceRateCalculation() {
 module.exports = {
   startSurfaceRateCalculation,
   stopSurfaceRateCalculation,
-  sendPostRequest,
 };

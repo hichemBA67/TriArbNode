@@ -1,7 +1,8 @@
 const config = require("config");
 
 // Helpers //
-const saveStructureTradingPairs = require("./saveStructureTradingPairs");
+const saveSurfaceRateTradingPairs = require("./saveSurfaceRateTradingPairs");
+const { clearSurfaceRateDatabase } = require("../database/clearDatabase");
 
 const minimumSurfaceRate = config.get("minimumSurfaceRate");
 const startingAmount = config.get("startingAmount");
@@ -9,13 +10,12 @@ const baseToQuote = "baseToQuote";
 const quoteToBase = "quoteToBase";
 
 module.exports = calculateSurfaceRate = async (triangularPairList) => {
+  clearSurfaceRateDatabase();
+
   console.log("Calculating surface rate ...");
   for (let pairIndex = 0; pairIndex < triangularPairList.length; pairIndex++) {
     calculator(triangularPairList[pairIndex]);
   }
-  console.log(
-    "Surface rate calculated and potential pairs stored in database."
-  );
 };
 
 function calculator(triangularPair) {
@@ -392,7 +392,7 @@ function calculator(triangularPair) {
         tradeDescription3,
       };
 
-      saveStructureTradingPairs(surfaceRateObject);
+      saveSurfaceRateTradingPairs(surfaceRateObject);
     }
   }
 }

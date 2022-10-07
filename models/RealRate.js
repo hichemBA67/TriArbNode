@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
-const SurfaceRateSchema = new mongoose.Schema({
-  surfaceRateOpportunityHash: {
+const RealRateSchema = new mongoose.Schema({
+  realRateOpportunityHash: {
     type: String,
     require: true,
   },
@@ -91,7 +91,15 @@ const SurfaceRateSchema = new mongoose.Schema({
     type: Number,
     require: true,
   },
+  profitLossReal: {
+    type: Number,
+    require: true,
+  },
   surfaceRate: {
+    type: Number,
+    require: true,
+  },
+  realRate: {
     type: Number,
     require: true,
   },
@@ -118,7 +126,4 @@ const SurfaceRateSchema = new mongoose.Schema({
   },
 });
 
-module.exports = SurfaceRate = mongoose.model(
-  "surface-rate",
-  SurfaceRateSchema
-);
+module.exports = RealRate = mongoose.model("real-rate", RealRateSchema);
