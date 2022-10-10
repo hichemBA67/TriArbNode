@@ -23,6 +23,7 @@ app.use((req, res, next) => {
 app.use(morgan("tiny"));
 app.use(express.json({ extended: false }));
 
+app.use("/api/core", require("./routes/core"));
 app.use("/api/surface-rate", require("./routes/surfaceRate"));
 app.use("/api/real-rate", require("./routes/realRate"));
 app.use("/api/trade", require("./routes/trade"));

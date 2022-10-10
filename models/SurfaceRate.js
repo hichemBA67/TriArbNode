@@ -57,7 +57,7 @@ const SurfaceRateSchema = new mongoose.Schema({
     require: true,
   },
 
-  startingAmount: {
+  surfaceRateAmountIn: {
     type: Number,
     require: true,
   },

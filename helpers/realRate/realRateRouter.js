@@ -33,7 +33,7 @@ async function fetchSurfaceRateData() {
   if (surfaceRateData.length > 0) {
     console.log("Received surface rates from database.");
     // Calculate real rate
-    calculateDepth(surfaceRateData);
+    await calculateDepth(surfaceRateData);
   } else {
     console.log("No surface rate data found.");
   }

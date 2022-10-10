@@ -2,9 +2,7 @@
   "mongoURI": "mongodb+srv://triArb:67TriArb1996@triarb.oh7cses.mongodb.net/TriArb?retryWrites=true&w=majority",
   "UniswapV3GraphQLEndpoint": "https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v3",
   "minimumSurfaceRate": 1,
-  "startingAmount": 100,
-  "realRateAmountIn": 100,
-  "realRateThreashold": -99,
+  "surfaceRateAmountIn": 100,
   "mainnetRPCRealRate": "https://mainnet.infura.io/v3/a39ad8a5fd24482ba765a9768677b941",
   "mainnetRPCGasFees": "https://mainnet.infura.io/v3/e99f4b6655e94418bdd12efaf7ed56d6",
 

@@ -1,24 +1,31 @@
-const config = require("config");
-
 // Helpers //
 const saveSurfaceRateTradingPairs = require("./saveSurfaceRateTradingPairs");
 const { clearSurfaceRateDatabase } = require("../database/clearDatabase");
+const {
+  getMinimumSurfaceRate,
+  getSurfaceRateAmountIn,
+} = require("../core/coreGetter");
 
-const minimumSurfaceRate = config.get("minimumSurfaceRate");
-const startingAmount = config.get("startingAmount");
 const baseToQuote = "baseToQuote";
 const quoteToBase = "quoteToBase";
 
 module.exports = calculateSurfaceRate = async (triangularPairList) => {
+  const minimumSurfaceRate = await getMinimumSurfaceRate();
+  const surfaceRateAmountIn = await getSurfaceRateAmountIn();
+
   clearSurfaceRateDatabase();
 
   console.log("Calculating surface rate ...");
   for (let pairIndex = 0; pairIndex < triangularPairList.length; pairIndex++) {
-    calculator(triangularPairList[pairIndex]);
+    calculator(
+      triangularPairList[pairIndex],
+      minimumSurfaceRate,
+      surfaceRateAmountIn
+    );
   }
 };
 
-function calculator(triangularPair) {
+function calculator(triangularPair, minimumSurfaceRate, surfaceRateAmountIn) {
   let surfaceRateObject = {};
   let poolContract2;
   let poolContract3;
@@ -94,7 +101,7 @@ function calculator(triangularPair) {
 
     // Place first trade
     poolContract1 = aContract;
-    acquiredCoinT1 = startingAmount * swap1Rate;
+    acquiredCoinT1 = surfaceRateAmountIn * swap1Rate;
 
     if (direction == "forward") {
       // FORWARD: Check if aQuote (acquired coin) matches bQuote //
@@ -353,11 +360,11 @@ function calculator(triangularPair) {
     }
 
     // Calculate arbitrage result
-    let profitLoss = acquiredCoinT3 - startingAmount;
-    let profitLossPercentage = (profitLoss / startingAmount) * 100;
+    let profitLoss = acquiredCoinT3 - surfaceRateAmountIn;
+    let profitLossPercentage = (profitLoss / surfaceRateAmountIn) * 100;
 
     // Format Description
-    const tradeDescription1 = `Start with ${swap1} of ${startingAmount}. Swap at ${swap1Rate} for ${swap2} acquiring ${acquiredCoinT1}.`;
+    const tradeDescription1 = `Start with ${swap1} of ${surfaceRateAmountIn}. Swap at ${swap1Rate} for ${swap2} acquiring ${acquiredCoinT1}.`;
     const tradeDescription2 = `Swap ${acquiredCoinT1} of ${swap2} at ${swap2Rate} for ${swap3} acquiring ${acquiredCoinT2}.`;
     const tradeDescription3 = `Swap ${acquiredCoinT2} of ${swap3} at ${swap3Rate} for ${swap1} acquiring ${acquiredCoinT3}`;
 
@@ -377,7 +384,7 @@ function calculator(triangularPair) {
         poolTradeDirection1,
         poolTradeDirection2,
         poolTradeDirection3,
-        startingAmount,
+        surfaceRateAmountIn,
         acquiredCoinT1,
         acquiredCoinT2,
         acquiredCoinT3,

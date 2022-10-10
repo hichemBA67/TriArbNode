@@ -3,24 +3,30 @@ const QuoterABI = require("../../artifacts/UniswapV3/Quoter.json").abi;
 const config = require("config");
 
 // Helpers //
+const {
+  getRealRateAmountIn,
+  getRealRateThreashold,
+} = require("../core/coreGetter");
+
 const saveRealRateTradingPairs = require("./saveRealRateTradingPairs");
 const { clearRealRateDatabase } = require("../database/clearDatabase");
 
 const mainnetRPCRealRate = config.get("mainnetRPCRealRate");
-const realRateAmountIn = config.get("realRateAmountIn");
-const realRateThreashold = config.get("realRateThreashold");
 const quoterAddress = config.get("quoterAddress");
 
-module.exports = calculateDepth = (surfaceRateData) => {
+module.exports = calculateDepth = async (surfaceRateData) => {
+  const realRateAmountIn = await getRealRateAmountIn();
+  const realRateThreashold = await getRealRateThreashold();
+
   clearRealRateDatabase();
 
   console.log("Starting real rate calculation ...");
   for (let i = 0; i < surfaceRateData.length; i++) {
-    calculatePair(surfaceRateData[i]);
+    calculatePair(surfaceRateData[i], realRateAmountIn, realRateThreashold);
   }
 };
 
-async function calculatePair(pairData) {
+async function calculatePair(pairData, realRateAmountIn, realRateThreashold) {
   // Extract variables
   let pair1ContractAddress = pairData.poolContract1;
   let pair2ContractAddress = pairData.poolContract2;
@@ -51,7 +57,12 @@ async function calculatePair(pairData) {
     trade3Direction
   );
   // Calculate and save results
-  caluclateArbitrage(realRateAmountIn, acquiredCoinT3, pairData);
+  caluclateArbitrage(
+    realRateAmountIn,
+    acquiredCoinT3,
+    pairData,
+    realRateThreashold
+  );
 }
 
 // GET PRICE //
@@ -148,7 +159,12 @@ async function getPrice(factory, amountIn, tradeDirection) {
 }
 
 // CALCULATE ARBITRAGE //
-function caluclateArbitrage(amountIn, amountOut, surfaceObject) {
+function caluclateArbitrage(
+  amountIn,
+  amountOut,
+  surfaceObject,
+  realRateThreashold
+) {
   // Calculate profit or loss
   const profitLoss = amountOut - amountIn;
   if (profitLoss > realRateThreashold) {
