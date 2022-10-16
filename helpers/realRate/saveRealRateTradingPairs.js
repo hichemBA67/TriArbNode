@@ -26,6 +26,8 @@ function createRealRateObject(surfaceRateObject) {
     poolTradeDirection2: surfaceRateObject.poolTradeDirection2,
     poolTradeDirection3: surfaceRateObject.poolTradeDirection3,
     surfaceRateAmountIn: surfaceRateObject.surfaceRateAmountIn,
+    realRateAmountIn: surfaceRateObject.surfaceRateAmountIn,
+    realRateAmountOut: surfaceRateObject.realRateAmountOut,
     acquiredCoinT1: surfaceRateObject.acquiredCoinT1,
     acquiredCoinT2: surfaceRateObject.acquiredCoinT2,
     acquiredCoinT3: surfaceRateObject.acquiredCoinT3,

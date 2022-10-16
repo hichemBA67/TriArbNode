@@ -4,8 +4,6 @@ const config = require("config");
 const uniswapV2ContractAddress = config.get("uniswapV2ContractAddress");
 const privateKey = process.env["MAINNET_PRIVATE_KEY"];
 
-import { DR_PEPPER } from "../../utils/Addresses";
-
 async function executeTrade(realRateData) {
   const { ethers } = require("ethers");
 

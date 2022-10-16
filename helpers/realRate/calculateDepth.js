@@ -92,10 +92,15 @@ async function getPrice(factory, amountIn, tradeDirection) {
       "function symbol() view returns (string)",
       "function decimals() view returns (uint)",
     ];
-    const contract = new ethers.Contract(tokenAddress, tokenABI, provider);
-    const tokenName = await contract.name();
-    const tokenSymbol = await contract.symbol();
-    const tokenDecimals = await contract.decimals();
+
+    try {
+      const contract = new ethers.Contract(tokenAddress, tokenABI, provider);
+      const tokenName = await contract.name();
+      const tokenSymbol = await contract.symbol();
+      const tokenDecimals = await contract.decimals();
+    } catch {
+      return 0;
+    }
 
     tokenObject = {
       id: "token" + i,
@@ -167,11 +172,14 @@ function caluclateArbitrage(
 ) {
   // Calculate profit or loss
   const profitLoss = amountOut - amountIn;
+  console.log(surfaceObject);
   if (profitLoss > realRateThreashold) {
     const profitLossPercent = (profitLoss / amountIn) * 100;
 
     surfaceObject.profitLossReal = profitLoss;
     surfaceObject.realRate = profitLossPercent;
+    surfaceObject.realRateAmountIn = amountIn;
+    surfaceObject.realRateAmountOut = amountOut;
     saveRealRateTradingPairs(surfaceObject);
   }
   return;

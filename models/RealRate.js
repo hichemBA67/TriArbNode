@@ -61,6 +61,14 @@ const RealRateSchema = new mongoose.Schema({
     type: Number,
     require: true,
   },
+  realRateAmountIn: {
+    type: Number,
+    require: true,
+  },
+  realRateAmountOut: {
+    type: Number,
+    require: true,
+  },
   acquiredCoinT1: {
     type: Number,
     require: true,
