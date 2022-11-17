@@ -3,9 +3,12 @@ const cronstrue = require("cronstrue");
 
 const RealRate = require("../../models/RealRate");
 
+// Helpers
+const { testTrade } = require("./tradeTester");
+
 let task;
 
-function startTrade(timer) {
+function startTradeExecution(timer) {
   console.log(
     `\n[${new Date(
       Date.now()
@@ -17,10 +20,10 @@ function startTrade(timer) {
   if (task) task.stop();
   task = cron.schedule(timer, async () => {
     console.log("Fetching real rates from database ...");
-    fetchRealRateData();
+    executeTrade();
   });
 }
-async function fetchRealRateData() {
+async function executeTrade() {
   let realRateData = await RealRate.find();
   if (realRateData.length > 0) {
     console.log("Received real rates from database.");
@@ -31,7 +34,7 @@ async function fetchRealRateData() {
   }
 }
 
-function stopRealRateCalculation() {
+function stopTradeExecution() {
   if (task) task.stop();
   console.log(
     `\n[${new Date(
@@ -41,6 +44,6 @@ function stopRealRateCalculation() {
 }
 
 module.exports = {
-  startRealRateCalculation,
-  stopRealRateCalculation,
+  startTradeExecution,
+  stopTradeExecution,
 };

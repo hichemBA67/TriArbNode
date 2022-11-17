@@ -2,11 +2,15 @@ const express = require("express");
 const cronstrue = require("cronstrue");
 
 //Helpers
+const {
+  startTradeExecution,
+  stopTradeExecution,
+} = require("../helpers/trade/tradeRouter");
 const calculateTimer = require("../helpers/node-cron/calculateTimer");
 
 const router = express.Router();
 
-router.post("/start-trade/", async (req, res) => {
+router.post("/start-trade-execution/", async (req, res) => {
   const timerData = req.body;
   try {
     if (
@@ -23,10 +27,12 @@ router.post("/start-trade/", async (req, res) => {
 
     const timer = calculateTimer(timerData);
 
+    startTradeExecution(timer);
+
     res
       .status(200)
       .send(
-        "Reaccuring surface rate calculation initialized with interval: " +
+        "Reaccuring trade execution initialized with interval: " +
           cronstrue.toString(timer)
       );
   } catch (error) {
@@ -35,10 +41,10 @@ router.post("/start-trade/", async (req, res) => {
   }
 });
 
-router.post("/stop-surface-rate-calculation/", async (req, res) => {
+router.post("/stop-trade-execution/", async (req, res) => {
   try {
-    stopSurfaceRateCalculation();
-    res.status(200).send("Reaccuring surface rate calculation stopped.");
+    stopTradeExecution();
+    res.status(200).send("Reaccuring trade execution stopped.");
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Server error");
