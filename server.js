@@ -3,6 +3,8 @@ const morgan = require("morgan");
 
 const app = express();
 
+const PORT = process.env.PORT || 3000;
+
 //Connect DB
 const connectDB = require("./config/db");
 connectDB();
@@ -28,6 +30,6 @@ app.use("/api/surface-rate", require("./routes/surfaceRate"));
 app.use("/api/real-rate", require("./routes/realRate"));
 app.use("/api/trade", require("./routes/trade"));
 
-app.listen(5001, () => {
-  console.log("Server is running on Port 5001");
+app.listen(PORT, () => {
+  console.log(`Server is running on Port ${PORT}`);
 });
