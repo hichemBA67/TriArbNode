@@ -24,6 +24,9 @@ module.exports = calculateDepth = async (surfaceRateData) => {
   for (let i = 0; i < surfaceRateData.length; i++) {
     calculatePair(surfaceRateData[i], realRateAmountIn, realRateThreashold);
   }
+  console.log(
+    "Finished real rate calculation ... \n ============================================================="
+  );
 };
 
 async function calculatePair(pairData, realRateAmountIn, realRateThreashold) {
@@ -98,18 +101,19 @@ async function getPrice(factory, amountIn, tradeDirection) {
       const tokenName = await contract.name();
       const tokenSymbol = await contract.symbol();
       const tokenDecimals = await contract.decimals();
+
+      tokenObject = {
+        id: "token" + i,
+        tokenSymbol,
+        tokenName,
+        tokenDecimals,
+        tokenAddress,
+      };
+
+      tokenInfoArray.push(tokenObject);
     } catch {
       return 0;
     }
-
-    tokenObject = {
-      id: "token" + i,
-      tokenSymbol: tokenSymbol,
-      tokenName: tokenName,
-      tokenDecimals: tokenDecimals,
-      tokenAddress: tokenAddress,
-    };
-    tokenInfoArray.push(tokenObject);
   }
 
   // Identify the correct token as A and also B respectively
@@ -172,7 +176,6 @@ function caluclateArbitrage(
 ) {
   // Calculate profit or loss
   const profitLoss = amountOut - amountIn;
-  console.log(surfaceObject);
   if (profitLoss > realRateThreashold) {
     const profitLossPercent = (profitLoss / amountIn) * 100;
 

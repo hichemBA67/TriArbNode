@@ -19,9 +19,11 @@ function startRealRateCalculation(timer) {
   task = cron.schedule(timer, async () => {
     // Log
     console.log(
-      `\n[${new Date(
-        Date.now()
-      ).toUTCString()}] Starting real rate calculation ... `
+      `\n[${new Date(Date.now()).toUTCString()}] 
+      \n =================================================================
+      \n ---------------------------------------
+      Starting real rate calculation ... 
+     \n ------------------------------------- `
     );
     console.log("Fetching surface rates from database ...");
 
@@ -32,8 +34,12 @@ async function fetchSurfaceRateData() {
   let surfaceRateData = await SurfaceRate.find();
   if (surfaceRateData.length > 0) {
     console.log("Received surface rates from database.");
-    // Calculate real rate
-    await calculateDepth(surfaceRateData);
+    try {
+      // Calculate real rate
+      await calculateDepth(surfaceRateData);
+    } catch {
+      console.error("Surface rates could not be caluclated");
+    }
   } else {
     console.log("No surface rate data found.");
   }

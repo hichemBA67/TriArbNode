@@ -42,7 +42,11 @@ function sendPostRequest() {
     function (error, response, body) {
       if (!error && response.statusCode == 200) {
         console.log("Data received from GraphQL.");
-        structureTradingPairs(body.data.pools);
+        try {
+          structureTradingPairs(body.data.pools);
+        } catch {
+          console.error("GraphQL data did not return pools.");
+        }
       }
     }
   );
