@@ -3,8 +3,8 @@
   "UniswapV3GraphQLEndpoint": "https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v3",
   "minimumSurfaceRate": 1,
   "surfaceRateAmountIn": 100,
-  "mainnetRPCRealRate": "https://mainnet.infura.io/v3/a39ad8a5fd24482ba765a9768677b941",
-  "mainnetRPCGasFees": "https://mainnet.infura.io/v3/e99f4b6655e94418bdd12efaf7ed56d6",
+  "mainnetRPCRealRate": "https://mainnet.infura.io/v3/0225f637b71749bf921fa343a3174df1",
+  "mainnetRPCGasFees": "https://mainnet.infura.io/v3/0225f637b71749bf921fa343a3174df1",
 
   "quoterAddress": "0xb27308f9F90D607463bb33eA1BeBb41C27CE5AB6",
   "uniswapV2ContractAddress": "0x01827BB000639decC1425E92BCdDDe66375DA626"
